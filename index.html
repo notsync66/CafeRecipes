@@ -456,18 +456,18 @@ function goHome(){
 }
 
 function renderSearchBox(){
-  return `<input class="search" id="tab-search" type="text" placeholder="ค้นหาเมนู... (พิมพ์ผิดก็หาเจอ) — ค้นได้ทุกหมวดหมู่">`;
+  return `<input class="search" id="tab-search" type="text" autofocus inputmode="search" placeholder="ค้นหาเมนู... (พิมพ์ผิดก็หาเจอ) — ค้นได้ทุกหมวดหมู่">`;
 }
 function wireSearchBox(){
   const el = document.getElementById('tab-search');
   if(!el) return;
   el.value = state.globalQuery || '';
   el.oninput = (e) => { state.globalQuery = e.target.value; renderStage(); };
-  // keep focus + caret position across re-renders while typing
-  if(document.activeElement === el || state._searchFocused){
-    el.focus();
-    const v = el.value; el.value=''; el.value=v;
-  }
+  // always focus: the input is recreated on every keystroke render, so this
+  // both opens the keyboard the moment the search tab is opened, and keeps
+  // focus (with caret at the end) across re-renders while typing
+  el.focus();
+  const v = el.value; el.value=''; el.value=v;
 }
 
 function renderTabBar(){
