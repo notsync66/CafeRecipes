@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตำรับร้าน — คู่มือสูตรเครื่องดื่ม</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #2b2016;
+    --paper: #efe9d8;
+    --paper-deep: #e4dcc3;
+    --matcha: #5c6b2f;
+    --matcha-deep: #3f4a1f;
+    --hojicha: #935a34;
+    --hojicha-deep: #6e4023;
+    --clay: #b3552b;
+    --line: rgba(43,32,22,0.16);
+    --card: #f7f3e6;
+    --warn: #a13a2e;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(92,107,47,0.07), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(147,90,52,0.08), transparent 45%);
+    color: var(--ink);
+    font-family: 'Noto Sans Thai', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+  }
+  header.top{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom: 6px;
+  }
+  .mark{ width: 38px; height:38px; flex: none; }
+  h1.brand{
+    font-family:'Noto Serif Thai', serif;
+    font-weight:700;
+    font-size: 24px;
+    margin:0;
+    color: var(--matcha-deep);
+  }
+  .sub{ font-size: 13px; color: var(--ink); opacity: 0.55; margin: 2px 0 0 52px; }
+
+  .disclaimer{
+    margin: 16px 0 4px;
+    padding: 10px 14px;
+    background: #f4e6d8;
+    border: 1px solid rgba(179,85,43,0.3);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--warn);
+    line-height: 1.5;
+  }
+
+  nav.crumbs{
+    display:flex; align-items:center; flex-wrap: wrap; gap: 6px;
+    margin: 18px 0 20px; font-size: 13.5px;
+  }
+  nav.crumbs button{
+    background:none; border:none; font-family:'Noto Sans Thai', sans-serif;
+    font-size:13.5px; color: var(--ink); opacity:0.5; cursor:pointer; padding: 4px 2px;
+  }
+  nav.crumbs button.active{ opacity:1; font-weight:700; color: var(--matcha-deep); }
+  nav.crumbs .sep{ opacity:0.3; }
+
+  input.search{
+    width:100%;
+    font-family:'Noto Sans Thai', sans-serif;
+    font-size: 14.5px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  input.search:focus{ outline: none; border-color: var(--matcha); }
+
+  .panel{ animation: rise 0.32s ease; }
+  @keyframes rise{ from{ opacity:0; transform: translateY(8px); } to{ opacity:1; transform: translateY(0); } }
+
+  .step-label{
+    font-family:'Noto Serif Thai', serif; font-size: 15px; font-weight:600;
+    color: var(--hojicha-deep); margin: 0 0 14px; display:flex; align-items:center; gap: 8px;
+  }
+  .step-label .n{
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
+    border-radius:50%; background: var(--hojicha-deep); color: var(--card); font-size:12px; font-weight:700;
+  }
+
+  .grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .grid.drink-grid{ grid-template-columns: 1fr; }
+  .tab-bar{
+    display:flex; gap: 8px; margin-top: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab-btn{
+    flex:1; background:none; border:none; cursor:pointer; font-family:'Noto Serif Thai', serif;
+    font-size: 14.5px; font-weight:600; color: var(--ink); opacity:0.5;
+    padding: 10px 6px 12px; display:flex; align-items:center; justify-content:center; gap:6px;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tab-btn.active{ opacity:1; color: var(--matcha-deep); border-bottom-color: var(--matcha-deep); }
+  .tab-btn svg{ width:16px; height:16px; }
+  .tab-count{
+    font-family:'Noto Sans Thai', sans-serif; font-weight:700; font-size: 11px;
+    background: var(--hojicha-deep); color: var(--card); border-radius: 999px; padding: 1px 7px;
+  }
+
+  .star-btn{
+    position:absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(247,243,230,0.9); border: 1px solid var(--line); display:flex; align-items:center;
+    justify-content:center; cursor:pointer; padding:0; z-index: 2;
+  }
+  .star-btn svg{ width:16px; height:16px; }
+  .star-btn.active svg path{ fill: #d99a2b; stroke: #d99a2b; }
+  .star-btn:not(.active) svg path{ fill: none; stroke: var(--ink); opacity:0.45; }
+  .tile{
+    position: relative;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px 16px; cursor:pointer; text-align:left; font-family:'Noto Sans Thai', sans-serif;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .ticket{ position: relative; }
+  .ticket .star-btn{ top: 20px; right: 20px; background: var(--paper); }
+  .tile:hover{ transform: translateY(-2px); border-color: var(--matcha); box-shadow: 0 6px 16px rgba(63,74,31,0.12); }
+  .tile .t-name{ font-family:'Noto Serif Thai', serif; font-weight:600; font-size: 16.5px; color: var(--ink); display:block; margin-bottom:3px; }
+  .tile .t-sub{ font-size: 12px; opacity:0.5; }
+  .tile .t-meta{ font-size: 12.5px; opacity:0.55; }
+  .grid.cat-grid{ grid-template-columns: repeat(2, 1fr); }
+  .tile.cat{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: 10px; text-align:center; aspect-ratio: 1 / 1; padding: 14px;
+  }
+  .tile.cat .t-name{ margin-bottom:0; }
+  .leaf-badge{ width: 38px; height:38px; border-radius: 50%; background: var(--matcha); display:flex;align-items:center;justify-content:center; flex:none; }
+  .leaf-badge svg{ width:20px; height:20px; }
+
+  .search-result-item{ display:flex; flex-direction:column; gap:2px; }
+  .search-result-item .t-cat{ font-size: 11.5px; opacity:0.5; }
+  mark{ background: rgba(92,107,47,0.28); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+  .dial-row{ display:flex; flex-direction:column; gap:10px; }
+  .dial-btn{
+    display:flex; align-items:center; gap:14px; background: var(--card); border:1px solid var(--line);
+    border-radius: 14px; padding: 12px 16px; cursor:pointer; text-align:left; font-family:'Noto Sans Thai', sans-serif;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .dial-btn:hover{ border-color: var(--clay); transform: translateY(-1px); }
+  .dial-btn.disabled{ opacity: 0.4; cursor: default; }
+  .dial-btn.disabled:hover{ transform:none; border-color: var(--line); }
+  .cup{ flex:none; width: 38px; height: 44px; }
+  .cup svg{ width:100%; height:100%; display:block; }
+  .dial-info{ flex:1; }
+  .dial-pct{ font-family:'Noto Serif Thai', serif; font-weight:700; font-size: 16px; color: var(--hojicha-deep); }
+  .dial-name{ font-size: 12.5px; opacity:0.6; }
+  .dial-unavail{ font-size: 11.5px; color: var(--clay); }
+
+  .ticket{ background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 22px 22px; position: relative; overflow:hidden; }
+  .ticket::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:5px;
+    background: repeating-linear-gradient(90deg, var(--matcha) 0 14px, var(--hojicha) 14px 28px); opacity:0.8;
+  }
+  .ticket h2{ font-family:'Noto Serif Thai', serif; font-size: 22px; margin: 6px 0 2px; color: var(--ink); }
+  .ticket .name-sub{ font-size: 13px; opacity:0.5; margin-bottom: 4px; }
+  .ticket .pct-tag{
+    display:inline-block; margin-top:6px; font-size: 13px; font-weight:700; color: var(--card);
+    background: var(--matcha-deep); padding: 3px 12px; border-radius: 999px;
+  }
+  .ing-title{ font-family:'Noto Serif Thai', serif; font-size: 14.5px; font-weight:600; color: var(--hojicha-deep); margin: 18px 0 10px; }
+  ul.ings{ list-style:none; margin:0 0 6px; padding:0; display:flex; flex-direction:column; gap: 8px; }
+  ul.ings li{
+    display:flex; align-items:center; justify-content:space-between; gap: 12px; padding: 10px 14px;
+    background: var(--paper); border-radius: 10px; border: 1px solid var(--line);
+  }
+  ul.ings li .lbl{ font-size:14.5px; }
+  ul.ings li .val{ font-weight:700; font-family:'Noto Serif Thai', serif; color: var(--matcha-deep); white-space:normal; text-align:right; max-width: 55%; }
+  ul.ings li.override .val{ color: var(--clay); }
+  ul.ings li.flagged{ border-color: var(--warn); background: #f7e9e5; }
+  ul.ings li.flagged .val{ color: var(--warn); }
+  ul.ings li.note-row{ background: transparent; border-style: dashed; }
+  ul.ings li.note-row .lbl{ font-style: italic; opacity: 0.75; }
+  .empty-note{ font-size: 14px; opacity: 0.65; padding: 30px 10px; text-align:center; }
+  .no-attrs-note{ font-size: 13.5px; opacity: 0.55; font-style: italic; margin: 4px 0 0; }
+
+  .back-row{ margin-top: 18px; display:flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .back-btn{
+    background:none; border: 1px solid var(--line); border-radius: 999px; padding: 9px 18px;
+    font-family:'Noto Sans Thai', sans-serif; font-size: 13.5px; color: var(--ink); cursor:pointer;
+  }
+  .back-btn:hover{ border-color: var(--hojicha); }
+  .back-btn.home-btn{ color: var(--hojicha-deep); border-color: rgba(147,90,52,0.35); }
+  .no-results{ padding: 40px 10px; text-align:center; opacity:0.6; font-size:14px; }
+
+  .note-box{ margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .note-box .note-title{
+    font-family:'Noto Serif Thai', serif; font-size: 14px; font-weight:600;
+    color: var(--hojicha-deep); margin-bottom: 8px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .note-box .note-status{ font-size: 11.5px; opacity: 0.55; font-weight: 400; font-family:'Noto Sans Thai', sans-serif; }
+  .note-box textarea{
+    width:100%; min-height: 80px; resize: vertical; font-family:'Noto Sans Thai', sans-serif;
+    font-size: 13.5px; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--paper); color: var(--ink); line-height: 1.5;
+  }
+  .note-box textarea:focus{ outline: none; border-color: var(--hojicha); }
+  .note-box textarea:disabled{ opacity: 0.5; }
+  .note-box .note-hint{ font-size: 11px; opacity: 0.5; margin-top: 6px; }
+
+  @media (max-width: 420px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <svg class="mark" viewBox="0 0 40 40" fill="none">
+      <path d="M8 16h24l-2 14a4 4 0 0 1-4 3.5H14a4 4 0 0 1-4-3.5L8 16Z" fill="#5c6b2f" opacity="0.9"/>
+      <path d="M30 18c5-1 7 3 5 7-1.5 3-5 3.5-7 2" stroke="#935a34" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M14 16c0-4 2-7 1-11" stroke="#3f4a1f" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M20 16c0-5 3-6 2-11" stroke="#3f4a1f" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </svg>
+    <h1 class="brand">ตำรับร้าน</h1>
+  </header>
+  <div class="sub">คู่มือสูตรเครื่องดื่มทั้งร้าน — เลือกหมวดหมู่ แล้วไล่ตามขั้นตอน</div>
+  <div class="disclaimer" id="disclaimer"></div>
+
+  <div class="tab-bar" id="tab-bar"></div>
+  <nav class="crumbs" id="crumbs"></nav>
+  <input class="search" id="global-search" type="text" placeholder="ค้นหาเมนู... (พิมพ์ผิดก็หาเจอ) — ค้นได้ทุกหมวดหมู่">
+  <div class="stage" id="stage"></div>
+</div>
+
+<script id="cafe-data" type="application/json">{"disclaimer": "ข้อมูลในสเปรดชีตต้นฉบับระบุว่า อาจไม่ถูกต้อง 100% โปรดตรวจสอบให้แน่ใจก่อนทำสูตรจริง จุดที่มีเครื่องหมาย \"xx\" กำกับ คือจุดที่ผู้ทำสูตรต้นฉบับระบุว่าต้องตรวจสอบเป็นพิเศษ", "categories": [{"name": "ชาร้อน", "drinks": [{"name": "ชาร้อน", "category": "ชาร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ชาซองกลิ่นต่างๆ", "override": true, "flagged": false}, {"label": "ชา", "text": "1 ซอง", "override": true, "flagged": false}, {"label": "น้ำร้อน", "text": "10 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ชาร้อน"}, {"name": "ชาร้อน Take away", "category": "ชาร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "8 ออนซ์", "override": false}, {"label": "น้ำร้อน", "text": "8 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ชาร้อน Take away"}, {"name": "ชานมร้อนแก้วเล็ก", "category": "ชาร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ชาผง", "override": true, "flagged": false}, {"label": "ชา", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "สกัดน้ำชา", "text": "1+1", "override": true, "flagged": false}, {"label": "นมข้นหวาน\nออนซ์", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ห่างจาก ปากแก้ว  1 ซม.", "override": true, "flagged": false}, {"label": "โฟมนม", "text": "เติมจนเต็มแก้ว", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ชานมร้อนแก้วเล็ก"}, {"name": "ชานมร้อนแก้วใหญ่", "category": "ชาร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ชา", "text": "3 ช้อนโต๊ะ", "override": false}, {"label": "สกัดน้ำชา", "text": "2+1", "override": true, "flagged": false}, {"label": "นมข้นหวาน\nออนซ์", "text": "1 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ชานมร้อนแก้วใหญ่"}, {"name": "ชาเขียวนมร้อนแก้วเล็ก", "category": "ชาร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ใบชาเขียว", "override": true, "flagged": false}, {"label": "ชา", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "สกัดน้ำชา", "text": "1+1", "override": true, "flagged": false}, {"label": "ผงแต่งกลิ่นชาเขียว", "text": "2 ช้อนชา", "override": false}, {"label": "นมข้นหวาน\nออนซ์", "text": "0.5 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ชาเขียวนมร้อนแก้วเล็ก"}, {"name": "ชาเขียวนมร้อนแก้วใหญ่", "category": "ชาร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ชา", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "สกัดน้ำชา", "text": "2+2", "override": true, "flagged": false}, {"label": "ผงแต่งกลิ่นชาเขียว", "text": "2 ช้อนชา", "override": false}, {"label": "นมข้นหวาน\nออนซ์", "text": "1 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ชาเขียวนมร้อนแก้วใหญ่"}]}, {"name": "เครื่องดื่มประเภทชา", "drinks": [{"name": "ชานมเย็น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ชาผง", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "3 ชต.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "2+3", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ชานมเย็น"}, {"name": "ชานมปั่น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ปริมาณชา", "text": "3 ชต.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "2+1", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ชานมปั่น"}, {"name": "ชาเขียวนมเย็น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ใบชาเขียว", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "2 ชต.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "2+3", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นชาเขียว", "text": "3 ช้อนชา", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ชาเขียวนมเย็น"}, {"name": "ชาเขียวนมปั่น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ปริมาณชา", "text": "2 ชต.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "2+1", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นชาเขียว", "text": "5 ช้อนชา", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "0.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ชาเขียวนมปั่น"}, {"name": "โฮจิจะ บราวน์ชูการ์ ลาเต้", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "โฮจิจะ", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "น้ำร้อน 1.5", "override": true, "flagged": false}, {"label": "โฟมนม", "text": "โฟมนม", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "โฮจิจะ บราวน์ชูการ์ ลาเต้"}, {"name": "มัทฉะ สตรอว์เบอร์รี่ลาเต้", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ผงมัทฉะ", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "น้ำร้อน 2", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นชาเขียว", "text": "2 ช้อนชา", "override": false}, {"label": "น้ำเชื่อม", "text": "สตรอเบอร์รี่ 0.25 oz. เทลงแก้วแล้วใช้ช้อนเกลี่ย", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 1 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 1 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 1 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 0.5 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "มัทฉะ สตรอว์เบอร์รี่ลาเต้"}, {"name": "เพียวมัทฉะ", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ผงมัทฉะ", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา\nออนซ์", "text": "น้ำร้อน 5", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "เพียวมัทฉะ"}, {"name": "เพียวมัทฉะปั่น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ผงมัทฉะ", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "4 ชช.", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "3 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "น้ำอุณภูมิห้อง 5.5 oz.", "override": true, "flagged": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "น้ำอุณภูมิห้อง 5.5 oz.", "override": true, "flagged": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "น้ำอุณภูมิห้อง 5.5 oz.", "override": true, "flagged": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "น้ำอุณภูมิห้อง 5.5 oz.", "override": true, "flagged": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "น้ำอุณภูมิห้อง 8 oz.", "override": true, "flagged": false}]}}, "categorySub": null, "nameSub": null, "displayName": "เพียวมัทฉะปั่น"}, {"name": "โฮจิจะถั่วแดงปั่น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "โฮจิจะ", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "น้ำเชื่อม", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "ถั่วแดง", "text": "1 ช้อนพาย", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "บราวน์ชูการ์ 0.25 oz.", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "โฮจิจะถั่วแดงปั่น"}, {"name": "มัทฉะถั่วแดงปั่น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ผงมัทฉะ", "override": true, "flagged": false}, {"label": "ปริมาณชา", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นชาเขียว", "text": "1 ช้อนชา", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "ถั่วแดง", "text": "1 ช้อนพาย", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "มัทฉะถั่วแดงปั่น"}, {"name": "ชาดำเย็น", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ชาดำ", "override": true, "flagged": false}, {"label": "ชา", "text": "2 ช้อนชา", "override": false}, {"label": "สกัดน้ำชา", "text": "2+2", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ชาดำเย็น"}, {"name": "ชามะนาว", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ชา", "text": "2 ช้อนชา", "override": false}, {"label": "สกัดน้ำชา", "text": "2+2", "override": true, "flagged": false}, {"label": "น้ำมะนาว", "text": "0.5 ออนซ์", "override": false}, {"label": "มะนาวฝาน", "text": "1 ชิ้น", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ชามะนาว"}, {"name": "ชาเขียวน้ำผึ้งมะนาวเจลลี่", "category": "เครื่องดื่มประเภทชา", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ชนิดชา", "text": "ชาเขียวปรุงสำเร็จชนิดผง", "override": true, "flagged": false}, {"label": "ชา", "text": "1 ช้อนชา", "override": false}, {"label": "สกัดน้ำชา", "text": "2+2", "override": true, "flagged": false}, {"label": "น้ำผึ้ง", "text": "0.5 ออนซ์", "override": false}, {"label": "น้ำมะนาว", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "เจลลี่น้ำผึ้ง", "text": "2 ช้อนพาย", "override": false}, {"label": "มะนาวฝาน", "text": "1 ชิ้น", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "ชาเขียวน้ำผึ้งมะนาวเจลลี่"}]}, {"name": "เครื่องดื่มประเภทนม", "drinks": [{"name": "นมสดร้อนแก้วเล็ก", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ห่างจาก ปากแก้ว 1 ซม.", "override": true, "flagged": false}, {"label": "โฟมนม/ผงโกโก้", "text": "โฟมนม", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "100% (หวานปกติ)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "50% (หวานน้อย)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "นมสดร้อนแก้วเล็ก"}, {"name": "นมสดร้อนแก้วใหญ่", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": null}, "100% (หวานปกติ)": {"available": false, "note": null}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "นมสดร้อนแก้วใหญ่"}, {"name": "นมสดเย็น", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "นมสดเย็น"}, {"name": "นมสดปั่น", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "นมสดปั่น"}, {"name": "ช็อกโกแลตร้อนแก้วเล็ก", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "4 ออนซ์", "override": false}, {"label": "ผงโกโก้", "text": "1 เล็ก", "override": true, "flagged": false}, {"label": "โฟมนม/ผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ช็อกโกแลตร้อนแก้วเล็ก"}, {"name": "ช็อกโกแลตร้อนแก้วใหญ่", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "6 ออนซ์", "override": false}, {"label": "ผงโกโก้", "text": "1 เล็ก", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": null}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ช็อกโกแลตร้อนแก้วใหญ่"}, {"name": "ช็อกโกแลตเย็น", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "น้ำร้อน", "text": "3 ออนซ์", "override": false}, {"label": "ผงโกโก้", "text": "2 เล็ก", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ช็อกโกแลตเย็น"}, {"name": "ช็อกโกแลตปั่น", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "22 ออนซ์", "override": false}, {"label": "น้ำร้อน", "text": "3 ออนซ์", "override": false}, {"label": "ผงโกโก้", "text": "1 ใหญ่", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ช็อกโกแลตปั่น"}, {"name": "ไอซ์มิลกี้สตรอว์เบอร์รี่", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 1 oz.", "override": true, "flagged": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 0.5 oz.", "override": true, "flagged": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "ไอซ์มิลกี้สตรอว์เบอร์รี่"}, {"name": "มิลกี้สตรอว์เบอร์รี่ปั่น", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ผงแต่งกลิ่นครีม", "text": "2 ช้อนชา", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": null}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 1.5 oz.", "override": true, "flagged": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "สตรอเบอร์รี่ 1 oz.", "override": true, "flagged": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "มิลกี้สตรอว์เบอร์รี่ปั่น"}, {"name": "สตรอว์เบอร์รี่ชีสเค้กปั่น", "category": "เครื่องดื่มประเภทนม", "attributes": [{"label": "ขนาดแก้ว", "text": "16 ออนซ์", "override": false}, {"label": "ผงแต่งกลิ่นครีม", "text": "2 ช้อนชา", "override": false}, {"label": "คุกกี้เนยสด", "text": "4/3 (ตัวเลขนี้ถูก Excel แปลงเป็นวันที่โดยไม่ตั้งใจ โปรดตรวจสอบต้นฉบับ)", "override": true}, {"label": "น้ำเชื่อม", "text": "สตรอเบอร์รี่  0.5/0.25", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": null}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ชีสเค้ก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ชีสเค้ก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "สตรอว์เบอร์รี่ชีสเค้กปั่น"}]}, {"name": "เครื่องดื่มสุขภาพ", "drinks": [{"name": "เฟรชมัทฉะลาเต้", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "น้ำร้อน", "text": "2 ออนซ์", "override": false}, {"label": "ผงมัทฉะ", "text": "2 ช้อนชา", "override": false}, {"label": "ผงแต่งกลิ่นชาเขียว", "text": "2 ช้อนชา", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "เฟรชมัทฉะลาเต้"}, {"name": "เฟรชคาเฟ่ลาเต้", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "กาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "เฟรชคาเฟ่ลาเต้"}, {"name": "เฟรชมิลค์ที", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "ชนิดชา", "text": "ชาผง", "override": true, "flagged": false}, {"label": "ชา", "text": "3 ชต.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา", "text": "2+3", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "3.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "3.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "3.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "3.5 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "เฟรชมิลค์ที"}, {"name": "เฟรชดาร์กช็อกโกแลต", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "น้ำร้อน", "text": "2 ออนซ์", "override": false}, {"label": "ผงโกโก้พรีเมียม", "text": "4 ช้อน", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "เฟรชดาร์กช็อกโกแลต"}, {"name": "ไลท์แบล็คที่อัดนี", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "ชนิดชา", "text": "ชาดำ", "override": true, "flagged": false}, {"label": "ชา", "text": "2 ชช.", "override": true, "flagged": false}, {"label": "สกัดน้ำชา", "text": "3+2", "override": true, "flagged": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "1 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "กรณีเพิ่มความหวานระดับ 125% เก็บเงินลูกค้าเพิ่ม 15 บาท", "override": true, "flagged": false}, {"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "ไลท์แบล็คที่อัดนี"}, {"name": "ไลท์คอฟฟี่ฮันนี", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "กาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "5 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "ไลท์คอฟฟี่ฮันนี"}, {"name": "ไลท์มัทฉะฮันนี", "category": "เครื่องดื่มสุขภาพ", "attributes": [{"label": "น้ำร้อน", "text": "5 ออนซ์", "override": false}, {"label": "ผงมัทฉะ", "text": "2 ช้อนชา", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": false, "note": null}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0 ออนซ์", "override": false}]}}, "categorySub": "แก้ว 22 ออนซ์", "nameSub": null, "displayName": "ไลท์มัทฉะฮันนี"}]}, {"name": "กาแฟร้อนดำ", "drinks": [{"name": "เอสเปรสโซร้อน", "category": "กาแฟร้อนดำ", "attributes": [{"label": "ขนาดแก้ว", "text": "3.5 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "เอสเปรสโซร้อน"}, {"name": "แบล็คคอฟฟี่ร้อนแก้วเล็ก", "category": "กาแฟร้อนดำ", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "น้ำร้อน", "text": "75 มิลลิลิตร", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}, {"label": "หมายเหตุ", "text": "ตวงน้ำร้อนใส่แก้วก่อนสกัดน้ำกาแฟ", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "แบล็คคอฟฟี่ร้อนแก้วเล็ก"}, {"name": "แบล็คคอฟฟี่ร้อนแก้วใหญ่", "category": "กาแฟร้อนดำ", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "น้ำร้อน", "text": "150 มิลลิลิตร", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "แบล็คคอฟฟี่ร้อนแก้วใหญ่"}, {"name": "อเมซอนร้อนแก้วเล็ก", "category": "กาแฟร้อนดำ", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "4 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "อเมซอนร้อนแก้วเล็ก"}, {"name": "อเมซอนร้อนแก้วใหญ่", "category": "กาแฟร้อนดำ", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "5 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "อเมซอนร้อนแก้วใหญ่"}]}, {"name": "กาแฟร้อนใส่นม", "drinks": [{"name": "คาปูชิโนร้อนแก้วเล็ก", "category": "กาแฟร้อนใส่นม", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ครึ่งแก้ว", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "คาปูชิโนร้อนแก้วเล็ก"}, {"name": "มอคค่าร้อนแก้วเล็ก", "category": "กาแฟร้อนใส่นม", "attributes": [{"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}, {"label": "โกโก้พรีเมียม", "text": "1 ช้อนโต๊ะ", "override": false}, {"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ครึ่งแก้ว", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "มอคค่าร้อนแก้วเล็ก"}, {"name": "ไวท์ช็อกมัคคิอาโตร้อนแก้วเล็ก", "category": "กาแฟร้อนใส่นม", "attributes": [{"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}, {"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมสดร้อน", "text": "ครึ่งแก้ว", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "xx โฟมนม ผงโกโก้ Amazon", "override": true, "flagged": true}, {"label": "หมายเหตุ", "text": "xx  ตวงไซรัปไวท์ช็อกก่อนสกัดทำกาแฟ", "override": true, "flagged": true}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ไวท์ช็อกมัคคิอาโตร้อนแก้วเล็ก"}, {"name": "ลาเต้อเมซอนร้อนแก้วเล็ก", "category": "กาแฟร้อนใส่นม", "attributes": [{"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ห่างจาก ปากแก้ว  1 ซม.", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "ลาเต้อเมซอนร้อนแก้วเล็ก"}, {"name": "กาแฟร้อนใส่นม 12 ออนซ์", "category": "กาแฟร้อนใส่นม", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "สัดส่วนเหมือนแก้ว 7 ออนซ์", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": null, "displayName": "กาแฟร้อนใส่นม 12 ออนซ์"}]}, {"name": "กาแฟเย็น แก้ว 22 ออนซ์", "drinks": [{"name": "เอสเปรสโซเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "0 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "0.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2.5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "เอสเปรสโซเย็น"}, {"name": "อเมซอนเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "อเมซอนเย็น"}, {"name": "คาปูชิโนเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "คาปูชิโนเย็น"}, {"name": "มอคค่าเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}, {"label": "โกโก้พรีเมียม", "text": "1 ช้อนโต๊ะ", "override": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "มอคค่าเย็น"}, {"name": "ลาเต้ อเมซอนเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "4.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ลาเต้ อเมซอนเย็น"}, {"name": "อเมซอน เอ็กซ์ตร้าเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "8.5+17", "override": true, "flagged": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5+3", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นครีม", "text": "3 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "อเมซอน เอ็กซ์ตร้าเย็น"}, {"name": "แบล็คคอฟฟี่เย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "5 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "แบล็คคอฟฟี่เย็น"}, {"name": "แบล็คคอฟฟี่น้ำผึ้ง", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "5 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "กรณีเพิ่มความหวานระดับ 125% เก็บเงินลูกค้าเพิ่ม 15 บาท", "override": true, "flagged": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "1.5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "0.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "แบล็คคอฟฟี่น้ำผึ้ง"}, {"name": "แบล็คคอฟฟี่น้ำผึ้งมะนาว", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ราดด้านบน", "override": true, "flagged": false}, {"label": "น้ำร้อน", "text": "4 ออนซ์", "override": false}, {"label": "น้ำมะนาว", "text": "1 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "0.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "แบล็คคอฟฟี่น้ำผึ้งมะนาว"}, {"name": "ไวท์ช็อกบัคคิอาโตเย็น", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ราดด้านบน", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "ไวท์ช็อกบัคคิอาโตเย็น"}, {"name": "ไอซ์แบล็คคอฟฟี่โคโค่นัท", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ราดด้านบน", "override": true, "flagged": false}, {"label": "น้ำร้อน", "text": "น้ำอุณหภูมิห้อง 2.5 ออนซ์", "override": true, "flagged": false}, {"label": "น้ำมะนาว", "text": "น้ำมะพร้าว 3 ออนซ์", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.75", "override": true, "flagged": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.75", "override": true, "flagged": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.75", "override": true, "flagged": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.25", "override": true, "flagged": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "ไอซ์แบล็คคอฟฟี่โคโค่นัท"}, {"name": "ไอซ์คอฟฟี่โคโค่นัทลาเต้", "category": "กาแฟเย็น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "8.5 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ราดด้านบน", "override": true, "flagged": false}, {"label": "น้ำมะนาว", "text": "น้ำมะพร้าว 3 ออนซ์", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำผึ้ง", "text": "ไซรับมะพร้าว 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "ไอซ์คอฟฟี่โคโค่นัทลาเต้"}]}, {"name": "กาแฟปั่น แก้ว 22 ออนซ์", "drinks": [{"name": "เอสเปรสโซปั่น", "category": "กาแฟปั่น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ออนซ์", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "เอสเปรสโซปั่น"}, {"name": "อเมซอนปั่น", "category": "กาแฟปั่น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "3 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "อเมซอนปั่น"}, {"name": "คาปูชิโนปั่น", "category": "กาแฟปั่น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ออนซ์", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "คาปูชิโนปั่น"}, {"name": "มอคค่าปั่น", "category": "กาแฟปั่น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ออนซ์", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "โกโก้พรีเมียม", "text": "1 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "มอคค่าปั่น"}, {"name": "ลาเต้ อเมซอนปั่น", "category": "กาแฟปั่น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "2 ออนซ์", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "3.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": null, "displayName": "ลาเต้ อเมซอนปั่น"}, {"name": "ไวท์ช็อกมัคคิอาโตปั่น", "category": "กาแฟปั่น แก้ว 22 ออนซ์", "attributes": [{"label": "ปริมาณกาแฟ", "text": "17 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "3 ออนซ์", "override": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "โฟมนม\nผงโกโก้", "text": "ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "ไวท์ช็อก 0.5", "override": true, "flagged": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นจืด", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1.5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "ไวท์ช็อกมัคคิอาโตปั่น"}]}, {"name": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "drinks": [{"name": "สตรอว์เบอร์รี่โยเกิร์ตสมูทตี้", "category": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "attributes": [{"label": "ผงโยเกิร์ตไบโอติก ตรา คาแฟ่ อเมซอน", "text": "3 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "2.25 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "3 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": null, "displayName": "สตรอว์เบอร์รี่โยเกิร์ตสมูทตี้"}, {"name": "มิกซ์เบอร์รี่โยเกิร์ตสมูทตี้", "category": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "attributes": [{"label": "ผงโยเกิร์ตไบโอติก ตรา คาแฟ่ อเมซอน", "text": "3 ช้อนโต๊ะ", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": false, "note": null}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "2.25 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "3 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "3 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "3 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "มิกซ์เบอร์รี่โยเกิร์ตสมูทตี้"}, {"name": "น้ำลิ้นจี่เย็น", "category": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "attributes": [], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "2.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "2 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "1.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "5.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "น้ำลิ้นจี่เย็น"}, {"name": "น้ำลิ้นจี่ปั่น", "category": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "attributes": [], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "4.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "4 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "3.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "น้ำลิ้นจี่ปั่น"}, {"name": "สตรอว์เบอร์รี่ปั่น", "category": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "attributes": [], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "3.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "3 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "2.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "สตรอว์เบอร์รี่ปั่น"}, {"name": "มิกซ์เบอร์รี่ปั่น", "category": "เครื่องดื่มอื่นๆ แก้ว 16 ออนซ์", "attributes": [], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "3.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "3 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำผลไม้เข้มข้น", "text": "2.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "2.5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": null, "displayName": "มิกซ์เบอร์รี่ปั่น"}]}, {"name": "กาแฟร้อน", "drinks": [{"name": "ฮอทเอสเปรสโซ่", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "3.5 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Espresso", "displayName": "ฮอทเอสเปรสโซ่"}, {"name": "ฮอทอเมริกาโน่", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "น้ำร้อน", "text": "4 ออนซ์", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}, {"label": "หมายเหตุ", "text": "เติมน้ำร้อนทีหลัง", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Americano", "displayName": "ฮอทอเมริกาโน่ (7 ออนซ์)"}, {"name": "ฮอทอเมริกาโน่", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "18 กรัม", "override": false}, {"label": "น้ำร้อน", "text": "6 ออนซ์", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Americano", "displayName": "ฮอทอเมริกาโน่ (12 ออนซ์)"}, {"name": "ฮอทคาปูชิโน่", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ครึ่งแก้ว", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Cappuccino", "displayName": "ฮอทคาปูชิโน่ (7 ออนซ์)"}, {"name": "ฮอทคาปูชิโน่", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Cappuccino", "displayName": "ฮอทคาปูชิโน่ (12 ออนซ์)"}, {"name": "ฮอทคาเฟ่ลาเต้", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ห่างจากปากแก้ว 1 ซม.", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Café Latte", "displayName": "ฮอทคาเฟ่ลาเต้ (7 ออนซ์)"}, {"name": "ฮอทคาเฟ่ลาเต้", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Café Latte", "displayName": "ฮอทคาเฟ่ลาเต้ (12 ออนซ์)"}, {"name": "ฮอทคาราเมลมัคคิอาโต้", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "7 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.25 ออนซ์", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}, {"label": "นมสดร้อน", "text": "ห่างจากปากแก้ว 1 ซม.", "override": true, "flagged": false}, {"label": "โฟมนม\nผงโกโก้", "text": "โฟมนม", "override": true, "flagged": false}, {"label": "หมายเหตุ", "text": "ราดซอสคาราเมลรูปฟันปลา ด้านบน/ตวงไซรัปคาราเมลก่อนสกัดน้ำกาแฟ", "override": true, "flagged": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Caramel Macchiato", "displayName": "ฮอทคาราเมลมัคคิอาโต้ (7 ออนซ์)"}, {"name": "ฮอทคาราเมลมัคคิอาโต้", "category": "กาแฟร้อน", "attributes": [{"label": "ขนาดแก้ว", "text": "12 ออนซ์", "override": false}, {"label": "ปริมาณกาแฟ", "text": "9 กรัม", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1.5 ออนซ์", "override": false}], "hasSweetness": false, "sweetness": null, "categorySub": null, "nameSub": "Hot Caramel Macchiato", "displayName": "ฮอทคาราเมลมัคคิอาโต้ (12 ออนซ์)"}]}, {"name": "กาแฟพรีเมียม 22 ออนซ์", "drinks": [{"name": "ไอซ์อเมริกาโน่", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "18 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "4 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "4 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "4 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": "Iced Americano", "displayName": "ไอซ์อเมริกาโน่"}, {"name": "ไอซ์คาปูชิโน่", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "18 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1", "override": true, "flagged": false}, {"label": "โฟมนม", "text": "โฟมนม ผงโกโก้", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "4 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": "Iced Cappuccino", "displayName": "ไอซ์คาปูชิโน่"}, {"name": "ไอซ์คาเฟ่ลาเต้", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "18 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1 ราดด้านบน", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": "Iced Café Latte", "displayName": "ไอซ์คาเฟ่ลาเต้"}, {"name": "ไอซ์คอฟฟี่มาร์เบิล", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "18 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1 ราดด้านบน", "override": true, "flagged": false}, {"label": "เจลลี่กาแฟ", "text": "xx 3 แบบตัก", "override": true, "flagged": true}, {"label": "เจลลี่กาแฟ", "text": "xx 3 แบบเต๋า", "override": true, "flagged": true}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": false, "note": null}, "0% (ไม่หวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}}, "categorySub": null, "nameSub": "Iced Coffee Marble", "displayName": "ไอซ์คอฟฟี่มาร์เบิล"}, {"name": "ไอซ์คาราเมลมัคคิอาโต้", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "18 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1 ราดด้านบน", "override": true, "flagged": false}, {"label": "ซอสคาราเมล", "text": "ฟันปลา", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "5 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": "ไม่มีความหวานในระดับนี้"}}, "categorySub": null, "nameSub": "Iced Caramel Macchiato", "displayName": "ไอซ์คาราเมลมัคคิอาโต้"}, {"name": "ไอซ์อเมริกาโน่ยูสุสปาร์กลิ้ง", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "ยูซุเพียวเร่ 0.75", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "ยูซุเพียวเร่ 0.75", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "ยูซุเพียวเร่ 0.75", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "ยูซุเพียวเร่ 0.25", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": "Iced Americano Yuzu Sparkling", "displayName": "ไอซ์อเมริกาโน่ยูสุสปาร์กลิ้ง"}, {"name": "ไอซ์อเมริกาโน่พีชสปาร์กลิ้ง", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "9 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1 ออนซ์", "override": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "น้ำเชื่อมกลิ่นพีช 1", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "น้ำเชื่อมกลิ่นพีช 1", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "น้ำเชื่อมกลิ่นพีช 0.5", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0 ออนซ์", "override": false}, {"label": "น้ำอุณหภูมิห้อง", "text": "น้ำเชื่อมกลิ่นพีช 0.25", "override": true, "flagged": false}, {"label": "นมสด", "text": "โซดา 5.5", "override": true, "flagged": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": "Iced Americano Peach Sparkling", "displayName": "ไอซ์อเมริกาโน่พีชสปาร์กลิ้ง"}, {"name": "คาราเมลมัคคิอาโต้ แฟรปเป้", "category": "กาแฟพรีเมียม 22 ออนซ์", "attributes": [{"label": "กาแฟ Selected", "text": "18 กรัม", "override": false}, {"label": "สกัดน้ำกาแฟ", "text": "1+1", "override": true, "flagged": false}, {"label": "ผงแดงกลิ่นครีม", "text": "2 ช้อนโต๊ะ", "override": false}, {"label": "ซอสคาราเมล", "text": "ฟันปลา", "override": true, "flagged": false}], "hasSweetness": true, "sweetness": {"125% (เพิ่มหวาน)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "2 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "100% (หวานปกติ)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "50% (หวานน้อย)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "1 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0.5 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "2 ออนซ์", "override": false}]}, "25% (หวานน้อยมาก)": {"available": true, "ingredients": [{"label": "น้ำเชื่อม AMZ", "text": "0.5 ออนซ์", "override": false}, {"label": "นมข้นหวาน", "text": "0 ออนซ์", "override": false}, {"label": "ไซรัปคาราเมล", "text": "0.5 ออนซ์", "override": false}, {"label": "นมสด", "text": "3 ออนซ์", "override": false}]}, "0% (ไม่หวาน)": {"available": false, "note": null}}, "categorySub": null, "nameSub": "Caramel Macchiato Frappe", "displayName": "คาราเมลมัคคิอาโต้ แฟรปเป้"}]}]}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('cafe-data').textContent);
+document.getElementById('disclaimer').textContent = '⚠ ' + DATA.disclaimer;
+
+let state = { category: null, drink: null, sweet: null, globalQuery: '', tab: 'categories' };
+
+// ---- favorites (personal to this browser/device, star toggle) ----
+let favorites = []; // array of {category, name}
+let favoritesLoaded = false;
+function favId(drink){ return (drink.category||'') + '||' + (drink.displayName || drink.name); }
+function isFavorite(drink){ const id = favId(drink); return favorites.some(f => f.id === id); }
+async function loadFavorites(){
+  try{
+    if(!window.storage) throw new Error('no storage');
+    const res = await window.storage.get('favorites_list', false);
+    favorites = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){
+    favorites = [];
+  }
+  favoritesLoaded = true;
+}
+async function persistFavorites(){
+  try{
+    if(!window.storage) throw new Error('no storage');
+    await window.storage.set('favorites_list', JSON.stringify(favorites), false);
+  }catch(e){ /* ignore, stays in-memory for this session */ }
+}
+function toggleFavorite(drink){
+  const id = favId(drink);
+  const idx = favorites.findIndex(f => f.id === id);
+  if(idx >= 0){
+    favorites.splice(idx, 1);
+  }else{
+    favorites.push({ id, category: drink.category, name: drink.displayName || drink.name });
+  }
+  persistFavorites();
+}
+function starBtnHtml(drink, extraClass){
+  const active = isFavorite(drink);
+  return `<button class="star-btn ${active ? 'active' : ''} ${extraClass||''}" data-fav-toggle title="${active ? 'เอาออกจากรายการโปรด' : 'เพิ่มในรายการโปรด'}">
+    <svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.4 6.9.7-5.2 4.7 1.6 6.9L12 17.6l-6.2 3.6 1.6-6.9-5.2-4.7 6.9-.7L12 2.5Z" stroke-width="1.6" stroke-linejoin="round"/></svg>
+  </button>`;
+}
+function attachStarHandler(container, drink){
+  const btn = container.querySelector('[data-fav-toggle]');
+  if(!btn) return;
+  btn.onclick = (e) => {
+    e.stopPropagation();
+    toggleFavorite(drink);
+    btn.classList.toggle('active');
+    btn.title = btn.classList.contains('active') ? 'เอาออกจากรายการโปรด' : 'เพิ่มในรายการโปรด';
+    if(state.tab === 'favorites') renderStage(); // refresh list if currently viewing favorites
+    renderTabBar();
+  };
+}
+
+// ---- shared note storage (per-drink, visible to everyone using this app) ----
+const noteCache = {};
+function slugKey(s){ return (s||'').toString().replace(/[\/\\'"]/g,'').replace(/\s+/g,'_').slice(0,80); }
+function noteKey(drink){ return `note__${slugKey(drink.category)}__${slugKey(drink.displayName || drink.name)}`; }
+async function loadNote(drink){
+  const key = noteKey(drink);
+  if(key in noteCache) return noteCache[key];
+  try{
+    if(!window.storage) throw new Error('no storage');
+    const res = await window.storage.get(key, true);
+    const val = res ? res.value : '';
+    noteCache[key] = val;
+    return val;
+  }catch(e){
+    noteCache[key] = '';
+    return '';
+  }
+}
+async function saveNote(drink, text){
+  const key = noteKey(drink);
+  noteCache[key] = text;
+  try{
+    if(!window.storage) throw new Error('no storage');
+    await window.storage.set(key, text, true);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+// ---- fuzzy search helpers (typo-tolerant) ----
+function normText(s){ return (s||'').toString().toLowerCase().trim(); }
+function editDistance(a, b){
+  const m = a.length, n = b.length;
+  if(m === 0) return n;
+  if(n === 0) return m;
+  let prev = new Array(n+1);
+  let cur = new Array(n+1);
+  for(let j=0;j<=n;j++) prev[j] = j;
+  for(let i=1;i<=m;i++){
+    cur[0] = i;
+    for(let j=1;j<=n;j++){
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+cost);
+    }
+    [prev, cur] = [cur, prev];
+  }
+  return prev[n];
+}
+function fuzzyThreshold(len){ return len<=3 ? 1 : (len<=6 ? 2 : 3); }
+// returns best (lowest) distance-like score for query against text, or Infinity if no reasonable match
+function fuzzyScore(query, text){
+  query = normText(query); text = normText(text);
+  if(!query || !text) return Infinity;
+  if(text.includes(query)) return 0;
+  const threshold = fuzzyThreshold(query.length);
+  let best = Infinity;
+  const words = text.split(/\s+/).filter(Boolean);
+  for(const w of words){
+    const d = editDistance(query, w);
+    if(d <= threshold && d < best) best = d;
+    if(w.length > query.length){
+      for(let i=0; i<=w.length-query.length; i++){
+        const sub = w.slice(i, i+query.length);
+        const d2 = editDistance(query, sub);
+        if(d2 <= threshold && d2 < best) best = d2;
+      }
+    }
+  }
+  const dWhole = editDistance(query, text);
+  if(dWhole <= threshold+1 && dWhole < best) best = dWhole;
+  return best;
+}
+function fuzzyMatch(query, text){ return fuzzyScore(query, text) !== Infinity; }
+
+const stage = document.getElementById('stage');
+const crumbs = document.getElementById('crumbs');
+
+function cupIcon(fillLevel){
+  const fillH = 34 * fillLevel;
+  const y = 4 + (34 - fillH);
+  const id = 'cc' + Math.round(fillLevel*1000);
+  return `<svg viewBox="0 0 38 44">
+    <path d="M4 6h30l-3.2 32a4 4 0 0 1-4 3.6H11.2a4 4 0 0 1-4-3.6L4 6Z" fill="none" stroke="#935a34" stroke-width="2"/>
+    <clipPath id="${id}"><path d="M5.3 7.3h27.4l-3 30.4a2.6 2.6 0 0 1-2.6 2.3H10.9a2.6 2.6 0 0 1-2.6-2.3L5.3 7.3Z"/></clipPath>
+    <rect x="4" y="${y}" width="30" height="${fillH+4}" fill="#5c6b2f" clip-path="url(#${id})" opacity="0.85"/>
+    <path d="M31 10c4-1 6 2.5 4.3 5.8-1.2 2.3-4 2.8-5.6 1.6" stroke="#935a34" stroke-width="2" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+function leafIcon(){
+  return `<svg viewBox="0 0 24 24" fill="none"><path d="M4 14C4 8 9 4 19 4c0 10-4 15-10 15-3 0-5-1-5-5Z" fill="#efe9d8"/><path d="M4 20c4-6 8-9 15-15" stroke="#efe9d8" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+}
+
+function renderCrumbs(){
+  const parts = [];
+  const rootLabel = state.tab === 'favorites' ? 'รายการโปรด' : 'หมวดหมู่';
+  parts.push(crumbBtn(rootLabel, state.category === null, () => goTo(0)));
+  if(state.category){
+    parts.push('<span class="sep">›</span>');
+    parts.push(crumbBtn(state.category, state.drink === null, () => goTo(1)));
+  }
+  if(state.drink){
+    parts.push('<span class="sep">›</span>');
+    parts.push(crumbBtn(state.drink.displayName || state.drink.name, !(state.drink.hasSweetness && state.sweet === null) && state.sweet===null, () => goTo(2)));
+  }
+  if(state.sweet){
+    parts.push('<span class="sep">›</span>');
+    parts.push(crumbBtn(state.sweet, true, null, true));
+  }
+  crumbs.innerHTML = parts.join('');
+}
+function crumbBtn(label, isActive, onClick, disabledLook){
+  const cls = isActive ? 'active' : '';
+  return `<button class="${cls}" data-nav="${label.replace(/"/g,'&quot;')}">${label}</button>`;
+}
+crumbs.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-nav]');
+  if(!btn) return;
+  const label = btn.getAttribute('data-nav');
+  if(label === 'หมวดหมู่' || label === 'รายการโปรด'){ goTo(0); return; }
+  if(state.category && label === state.category){ goTo(1); return; }
+  if(state.drink && label === (state.drink.displayName || state.drink.name)){ goTo(2); return; }
+});
+
+function goTo(level){
+  const tab = state.tab;
+  if(level === 0){ state = { category:null, drink:null, sweet:null, globalQuery:'', tab }; }
+  if(level === 1){ state.drink = null; state.sweet = null; state.globalQuery = ''; }
+  if(level === 2){ state.sweet = null; state.globalQuery = ''; }
+  render();
+}
+function goHome(){
+  state = { category:null, drink:null, sweet:null, globalQuery:'', tab: 'categories' };
+  render();
+}
+
+const globalSearchInput = document.getElementById('global-search');
+globalSearchInput.addEventListener('input', (e) => {
+  state.globalQuery = e.target.value;
+  renderStage();
+});
+
+function renderTabBar(){
+  const bar = document.getElementById('tab-bar');
+  const favCount = favorites.length;
+  bar.innerHTML = `
+    <button class="tab-btn ${state.tab==='categories' ? 'active' : ''}" id="tab-categories">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor" opacity=".8"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor" opacity=".8"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor" opacity=".8"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor" opacity=".8"/></svg>
+      หมวดหมู่เมนู
+    </button>
+    <button class="tab-btn ${state.tab==='favorites' ? 'active' : ''}" id="tab-favorites">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.4 6.9.7-5.2 4.7 1.6 6.9L12 17.6l-6.2 3.6 1.6-6.9-5.2-4.7 6.9-.7L12 2.5Z" fill="currentColor"/></svg>
+      รายการโปรด ${favCount ? `<span class="tab-count">${favCount}</span>` : ''}
+    </button>`;
+  document.getElementById('tab-categories').onclick = () => {
+    state = { category:null, drink:null, sweet:null, globalQuery:'', tab: 'categories' };
+    render();
+  };
+  document.getElementById('tab-favorites').onclick = () => {
+    state = { category:null, drink:null, sweet:null, globalQuery:'', tab: 'favorites' };
+    render();
+  };
+}
+
+function render(){
+  renderTabBar();
+  renderCrumbs();
+  if(globalSearchInput.value !== (state.globalQuery || '')) globalSearchInput.value = state.globalQuery || '';
+  renderStage();
+}
+
+function renderStage(){
+  const q = (state.globalQuery || '').trim();
+  if(q){ renderGlobalSearch(q); return; }
+  if(!state.category){
+    if(state.tab === 'favorites'){ renderFavorites(); } else { renderCategories(); }
+    return;
+  }
+  if(!state.drink){ renderDrinks(); return; }
+  if(state.drink.hasSweetness && !state.sweet){ renderSweetness(); return; }
+  renderRecipe();
+}
+
+function renderFavorites(){
+  if(favorites.length === 0){
+    stage.innerHTML = `<div class="panel">
+      <div class="step-label"><span class="n">★</span>รายการโปรด</div>
+      <div class="no-results">ยังไม่มีเมนูโปรด — กดไอคอนดาว ★ ที่เมนูไหนก็ได้เพื่อเพิ่มมาไว้ที่นี่</div>
+    </div>`;
+    return;
+  }
+  const drinksById = {};
+  getAllDrinks().forEach(({drink, categoryName}) => { drinksById[favId(drink)] = { drink, categoryName }; });
+  stage.innerHTML = `
+    <div class="panel">
+      <div class="step-label"><span class="n">★</span>รายการโปรด</div>
+      <div class="grid drink-grid" id="fav-grid"></div>
+    </div>`;
+  const grid = document.getElementById('fav-grid');
+  favorites.forEach(f => {
+    const found = drinksById[f.id];
+    if(!found) return;
+    const { drink, categoryName } = found;
+    const el = document.createElement('div');
+    el.className = 'tile';
+    el.tabIndex = 0;
+    el.innerHTML = `
+      <div class="search-result-item">
+        <span class="t-name">${drink.displayName || drink.name}</span>
+        ${drink.nameSub ? `<span class="t-sub">${drink.nameSub}</span>` : ''}
+        <span class="t-cat">${categoryName}</span>
+      </div>
+      ${starBtnHtml(drink)}`;
+    el.onclick = () => { state.category = categoryName; state.drink = drink; state.tab = 'categories'; render(); };
+    attachStarHandler(el, drink);
+    grid.appendChild(el);
+  });
+}
+
+let ALL_DRINKS = null;
+function getAllDrinks(){
+  if(ALL_DRINKS) return ALL_DRINKS;
+  ALL_DRINKS = [];
+  DATA.categories.forEach(cat => {
+    cat.drinks.forEach(d => ALL_DRINKS.push({ drink: d, categoryName: cat.name }));
+  });
+  return ALL_DRINKS;
+}
+
+function renderCategories(){
+  stage.innerHTML = `
+    <div class="panel">
+      <div class="step-label"><span class="n">1</span>เลือกหมวดหมู่</div>
+      <div class="grid cat-grid" id="cat-grid"></div>
+    </div>`;
+  const grid = document.getElementById('cat-grid');
+  DATA.categories.forEach(cat => {
+    const el = document.createElement('button');
+    el.className = 'tile cat';
+    el.innerHTML = `
+      <div class="leaf-badge">${leafIcon()}</div>
+      <div>
+        <span class="t-name">${cat.name}</span>
+        <span class="t-meta">${cat.drinks.length} เมนู</span>
+      </div>`;
+    el.onclick = () => { state.category = cat.name; render(); };
+    grid.appendChild(el);
+  });
+}
+
+function renderGlobalSearch(q){
+  const scored = [];
+  getAllDrinks().forEach(({drink, categoryName}) => {
+    const s1 = fuzzyScore(q, drink.name);
+    const s2 = fuzzyScore(q, drink.nameSub || '');
+    const s3 = fuzzyScore(q, categoryName);
+    const best = Math.min(s1, s2, s3 + 1);
+    if(best !== Infinity){
+      scored.push({ drink, categoryName, score: best });
+    }
+  });
+  scored.sort((a,b) => a.score - b.score);
+
+  const homeRow = `<div class="back-row"><button class="back-btn home-btn" id="search-home">⌂ กลับหน้าหลัก</button></div>`;
+
+  if(scored.length === 0){
+    stage.innerHTML = `<div class="panel">
+      <div class="no-results">ไม่พบเมนูที่ค้นหา ลองพิมพ์คำอื่นดูนะ</div>
+      ${homeRow}
+    </div>`;
+    document.getElementById('search-home').onclick = goHome;
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.className = 'grid drink-grid';
+  scored.slice(0, 40).forEach(({drink, categoryName}) => {
+    const el = document.createElement('div');
+    el.className = 'tile';
+    el.tabIndex = 0;
+    el.innerHTML = `
+      <div class="search-result-item">
+        <span class="t-name">${drink.displayName || drink.name}</span>
+        ${drink.nameSub ? `<span class="t-sub">${drink.nameSub}</span>` : ''}
+        <span class="t-cat">${categoryName}</span>
+      </div>
+      ${starBtnHtml(drink)}`;
+    el.onclick = () => {
+      state.category = categoryName; state.drink = drink; state.globalQuery = ''; state.tab = 'categories';
+      globalSearchInput.value = '';
+      render();
+    };
+    attachStarHandler(el, drink);
+    grid.appendChild(el);
+  });
+  stage.innerHTML = '';
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+  const label = document.createElement('div');
+  label.className = 'step-label';
+  label.textContent = `ผลการค้นหา (${scored.length} รายการ)`;
+  panel.appendChild(label);
+  panel.appendChild(grid);
+  panel.insertAdjacentHTML('beforeend', homeRow);
+  stage.appendChild(panel);
+  document.getElementById('search-home').onclick = goHome;
+}
+
+function currentCategoryDrinks(){
+  const cat = DATA.categories.find(c => c.name === state.category);
+  return cat ? cat.drinks : [];
+}
+
+function renderDrinks(){
+  stage.innerHTML = `
+    <div class="panel">
+      <div class="step-label"><span class="n">2</span>เลือกเครื่องดื่ม</div>
+      <div class="grid drink-grid" id="drink-grid"></div>
+      <div class="back-row">
+        <button class="back-btn" id="back0">‹ กลับไปเลือกหมวดหมู่</button>
+        <button class="back-btn home-btn" id="home0">⌂ กลับหน้าหลัก</button>
+      </div>
+    </div>`;
+  document.getElementById('back0').onclick = () => goTo(0);
+  document.getElementById('home0').onclick = goHome;
+  renderDrinkList();
+}
+
+function renderDrinkList(){
+  const grid = document.getElementById('drink-grid');
+  grid.innerHTML = '';
+  const list = currentCategoryDrinks();
+  if(list.length === 0){
+    grid.innerHTML = '<div class="no-results">ไม่มีเมนูในหมวดนี้</div>';
+    return;
+  }
+  list.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'tile';
+    el.tabIndex = 0;
+    el.innerHTML = `
+      <span class="t-name">${d.displayName || d.name}</span>
+      ${d.nameSub ? `<span class="t-sub">${d.nameSub}</span>` : ''}
+      ${starBtnHtml(d)}`;
+    el.onclick = () => { state.drink = d; render(); };
+    attachStarHandler(el, d);
+    grid.appendChild(el);
+  });
+}
+
+const SWEET_ORDER = ["125% (เพิ่มหวาน)","100% (หวานปกติ)","50% (หวานน้อย)","25% (หวานน้อยมาก)","0% (ไม่หวาน)"];
+const SWEET_FILL = {
+  "125% (เพิ่มหวาน)": 1, "100% (หวานปกติ)": 0.8, "50% (หวานน้อย)": 0.5,
+  "25% (หวานน้อยมาก)": 0.25, "0% (ไม่หวาน)": 0.05
+};
+
+function renderSweetness(){
+  stage.innerHTML = `
+    <div class="panel">
+      <div class="step-label"><span class="n">3</span>เลือกระดับความหวาน</div>
+      <div class="dial-row" id="dial-row"></div>
+      <div class="back-row">
+        <button class="back-btn" id="back1">‹ กลับไปเลือกเครื่องดื่ม</button>
+        <button class="back-btn home-btn" id="home1">⌂ กลับหน้าหลัก</button>
+      </div>
+    </div>`;
+  document.getElementById('back1').onclick = () => goTo(1);
+  document.getElementById('home1').onclick = goHome;
+  const row = document.getElementById('dial-row');
+  const levels = Object.keys(state.drink.sweetness);
+  const ordered = SWEET_ORDER.filter(l => levels.includes(l)).concat(levels.filter(l => !SWEET_ORDER.includes(l)));
+  ordered.forEach(level => {
+    const info = state.drink.sweetness[level];
+    const avail = info && info.available;
+    const el = document.createElement('button');
+    el.className = 'dial-btn' + (avail ? '' : ' disabled');
+    el.innerHTML = `
+      <div class="cup">${cupIcon(SWEET_FILL[level] ?? 0.5)}</div>
+      <div class="dial-info">
+        <div class="dial-pct">${level}</div>
+        ${avail ? '' : `<div class="dial-unavail">${(info && info.note) || 'ไม่มีสูตรระดับนี้'}</div>`}
+      </div>`;
+    if(avail){
+      el.onclick = () => { state.sweet = level; render(); };
+    } else {
+      el.disabled = true;
+    }
+    row.appendChild(el);
+  });
+}
+
+function ingLi(ing){
+  const cls = ['override','flagged'].filter(c => (c==='override' && ing.override) || (c==='flagged' && ing.flagged)).join(' ');
+  return `<li class="${cls}"><span class="lbl">${ing.label}</span><span class="val">${ing.text}</span></li>`;
+}
+
+function renderRecipe(){
+  const d = state.drink;
+  let sweetHtml = '';
+  if(d.hasSweetness){
+    const info = d.sweetness[state.sweet];
+    if(info.ingredients && info.ingredients.length){
+      sweetHtml = `<div class="ing-title">ส่วนผสมตามความหวาน</div><ul class="ings">${info.ingredients.map(ingLi).join('')}</ul>`;
+    } else {
+      sweetHtml = `<div class="empty-note">ไม่มีข้อมูลส่วนผสมสำหรับระดับความหวานนี้</div>`;
+    }
+  }
+
+  let attrHtml = '';
+  if(d.attributes && d.attributes.length){
+    attrHtml = `<div class="ing-title">ส่วนผสม / ข้อมูลประจำเมนู</div><ul class="ings">${d.attributes.map(a => {
+      const isNote = a.label.includes('หมายเหตุ');
+      const cls = isNote ? 'note-row' : (a.flagged ? 'flagged' : '');
+      return `<li class="${cls}"><span class="lbl">${a.label}</span><span class="val">${a.text}</span></li>`;
+    }).join('')}</ul>`;
+  } else if(!d.hasSweetness){
+    attrHtml = `<p class="no-attrs-note">ไม่มีข้อมูลส่วนผสมเพิ่มเติมสำหรับเมนูนี้</p>`;
+  }
+
+  stage.innerHTML = `
+    <div class="panel">
+      <div class="ticket">
+        ${starBtnHtml(d)}
+        <h2>${d.displayName || d.name}</h2>
+        ${d.nameSub ? `<div class="name-sub">${d.nameSub}</div>` : ''}
+        ${d.hasSweetness ? `<span class="pct-tag">${state.sweet}</span>` : ''}
+        ${attrHtml}
+        ${sweetHtml}
+        <div class="note-box">
+          <div class="note-title">โน้ตเพิ่มเติม (เผื่อสูตรมีการเปลี่ยนแปลง) <span class="note-status" id="note-status">กำลังโหลด...</span></div>
+          <textarea id="note-textarea" placeholder="พิมพ์โน้ตของเมนูนี้ไว้ที่นี่ เช่น ปรับสูตร วันที่ปรับ ฯลฯ — บันทึกอัตโนมัติ และทุกคนที่เปิดแอปนี้จะเห็นโน้ตเดียวกัน" disabled></textarea>
+          <div class="note-hint">โน้ตนี้แชร์ร่วมกันทุกคนที่ใช้แอปนี้ และผูกกับเมนู+ระดับหมวดหมู่นี้โดยเฉพาะ</div>
+        </div>
+      </div>
+      <div class="back-row">
+        <button class="back-btn" id="back2">‹ ${d.hasSweetness ? 'เลือกความหวานอื่น' : 'กลับไปเลือกเครื่องดื่ม'}</button>
+        <button class="back-btn home-btn" id="home2">⌂ กลับหน้าหลัก</button>
+      </div>
+    </div>`;
+  document.getElementById('back2').onclick = () => { if(d.hasSweetness){ goTo(2); } else { goTo(1); } };
+  document.getElementById('home2').onclick = goHome;
+  attachStarHandler(stage, d);
+
+  const ta = document.getElementById('note-textarea');
+  const statusEl = document.getElementById('note-status');
+  loadNote(d).then(val => {
+    if(state.drink !== d) return; // user navigated away already
+    ta.value = val || '';
+    ta.disabled = false;
+    statusEl.textContent = window.storage ? '' : '(ไม่สามารถบันทึกถาวรในเบราว์เซอร์นี้)';
+  });
+  let saveTimer = null;
+  ta.addEventListener('input', () => {
+    statusEl.textContent = 'กำลังพิมพ์...';
+    if(saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      statusEl.textContent = 'กำลังบันทึก...';
+      const ok = await saveNote(d, ta.value);
+      if(state.drink !== d) return;
+      statusEl.textContent = ok ? 'บันทึกแล้ว ✓' : 'บันทึกแบบชั่วคราว (เซสชันนี้เท่านั้น)';
+    }, 700);
+  });
+}
+
+(async function init(){
+  await loadFavorites();
+  render();
+})();
+</script>
+</body>
+</html>
