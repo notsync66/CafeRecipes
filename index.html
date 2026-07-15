@@ -45,7 +45,7 @@
   .wrap{
     max-width: 760px;
     margin: 0 auto;
-    padding: 24px 16px 80px;
+    padding: 24px 16px 104px;
   }
   header.top{
     display:flex;
@@ -53,6 +53,13 @@
     gap:14px;
     margin-bottom: 6px;
   }
+  .app-icon{
+    width: 44px; height:44px; flex: none; border-radius: 12px;
+    background: linear-gradient(135deg, var(--matcha) 0%, var(--matcha-deep) 100%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 3px 8px rgba(63,74,31,0.38), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .app-icon svg{ width:26px; height:26px; display:block; }
   .mark{ width: 38px; height:38px; flex: none; }
   h1.brand{
     font-family:'Noto Serif Thai', serif;
@@ -113,17 +120,22 @@
   .grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .grid.drink-grid{ grid-template-columns: 1fr; }
   .tab-bar{
-    display:flex; gap: 8px; margin-top: 18px;
-    border-bottom: 1px solid var(--line);
+    position: fixed; left:0; right:0; bottom:0; z-index: 100;
+    display:flex; gap: 6px;
+    max-width: 760px; margin: 0 auto;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 18px rgba(43,32,22,0.10);
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
   }
   .tab-btn{
     flex:1; background:none; border:none; cursor:pointer; font-family:'Noto Serif Thai', serif;
-    font-size: 14.5px; font-weight:600; color: var(--ink); opacity:0.5;
-    padding: 10px 6px 12px; display:flex; align-items:center; justify-content:center; gap:6px;
-    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    font-size: 12.5px; font-weight:600; color: var(--ink); opacity:0.5;
+    padding: 8px 6px 6px; border-radius: 12px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
   }
-  .tab-btn.active{ opacity:1; color: var(--matcha-deep); border-bottom-color: var(--matcha-deep); }
-  .tab-btn svg{ width:16px; height:16px; }
+  .tab-btn.active{ opacity:1; color: var(--matcha-deep); background: rgba(92,107,47,0.12); }
+  .tab-btn svg{ width:19px; height:19px; }
   .tab-count{
     font-family:'Noto Sans Thai', sans-serif; font-weight:700; font-size: 11px;
     background: var(--hojicha-deep); color: var(--card); border-radius: 999px; padding: 1px 7px;
@@ -183,22 +195,32 @@
     content:""; position:absolute; top:0; left:0; right:0; height:5px;
     background: repeating-linear-gradient(90deg, var(--matcha) 0 14px, var(--hojicha) 14px 28px); opacity:0.8;
   }
-  .ticket h2{ font-family:'Noto Serif Thai', serif; font-size: 22px; margin: 6px 0 2px; color: var(--ink); }
+  .ticket h2{ font-family:'Noto Serif Thai', serif; font-size: 24px; font-weight:700; margin: 6px 40px 2px 0; color: var(--ink); line-height:1.25; }
   .ticket .name-sub{ font-size: 13px; opacity:0.5; margin-bottom: 4px; }
-  .ticket .pct-tag{
-    display:inline-block; margin-top:6px; font-size: 13px; font-weight:700; color: var(--card);
-    background: var(--matcha-deep); padding: 3px 12px; border-radius: 999px;
+  .badge-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .pct-tag, .size-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size: 13.5px; font-weight:700; border-radius: 999px; padding: 6px 14px;
   }
-  .ing-title{ font-family:'Noto Serif Thai', serif; font-size: 14.5px; font-weight:600; color: var(--hojicha-deep); margin: 18px 0 10px; }
-  ul.ings{ list-style:none; margin:0 0 6px; padding:0; display:flex; flex-direction:column; gap: 8px; }
+  .pct-tag{ color: var(--card); background: var(--matcha-deep); }
+  .size-badge{ color: var(--hojicha-deep); background: rgba(147,90,52,0.14); border: 1px solid rgba(147,90,52,0.25); }
+  .size-badge svg{ width:15px; height:15px; }
+  .ing-title{
+    font-family:'Noto Serif Thai', serif; font-size: 15.5px; font-weight:700; color: var(--hojicha-deep);
+    margin: 24px 0 12px; padding-left: 12px; border-left: 4px solid var(--hojicha); line-height:1.3;
+  }
+  ul.ings{ list-style:none; margin:0 0 6px; padding:0; display:flex; flex-direction:column; gap: 9px; }
   ul.ings li{
-    display:flex; align-items:center; justify-content:space-between; gap: 12px; padding: 10px 14px;
-    background: var(--paper); border-radius: 10px; border: 1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; gap: 14px; padding: 13px 16px;
+    background: var(--paper); border-radius: 12px; border: 1px solid var(--line);
   }
-  ul.ings li .lbl{ font-size:14.5px; }
-  ul.ings li .val{ font-weight:700; font-family:'Noto Serif Thai', serif; color: var(--matcha-deep); white-space:normal; text-align:right; max-width: 55%; }
+  ul.ings li .lbl{ font-size:14px; opacity:0.65; }
+  ul.ings li .val{ font-weight:700; font-family:'Noto Serif Thai', serif; font-size:16.5px; color: var(--matcha-deep); white-space:normal; text-align:right; max-width: 58%; }
+  ul.ings li.override{ border-color: rgba(179,85,43,0.35); }
   ul.ings li.override .val{ color: var(--clay); }
   ul.ings li.flagged{ border-color: var(--warn); background: #f7e9e5; }
+  ul.ings li.flagged .lbl{ opacity:0.85; }
+  ul.ings li.flagged .lbl::before{ content:"⚠ "; }
   ul.ings li.flagged .val{ color: var(--warn); }
   ul.ings li.note-row{ background: transparent; border-style: dashed; }
   ul.ings li.note-row .lbl{ font-style: italic; opacity: 0.75; }
@@ -214,10 +236,10 @@
   .back-btn.home-btn{ color: var(--hojicha-deep); border-color: rgba(147,90,52,0.35); }
   .no-results{ padding: 40px 10px; text-align:center; opacity:0.6; font-size:14px; }
 
-  .note-box{ margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .note-box{ margin-top: 24px; padding-top: 18px; border-top: 1px dashed var(--line); }
   .note-box .note-title{
     font-family:'Noto Serif Thai', serif; font-size: 14px; font-weight:600;
-    color: var(--hojicha-deep); margin-bottom: 8px; display:flex; align-items:center; justify-content:space-between;
+    color: var(--hojicha-deep); margin-bottom: 8px; display:flex; align-items:center; justify-content:space-between; opacity:0.85;
   }
   .note-box .note-status{ font-size: 11.5px; opacity: 0.55; font-weight: 400; font-family:'Noto Sans Thai', sans-serif; }
   .note-box textarea{
@@ -237,12 +259,14 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <svg class="mark" viewBox="0 0 40 40" fill="none">
-      <path d="M8 16h24l-2 14a4 4 0 0 1-4 3.5H14a4 4 0 0 1-4-3.5L8 16Z" fill="#5c6b2f" opacity="0.9"/>
-      <path d="M30 18c5-1 7 3 5 7-1.5 3-5 3.5-7 2" stroke="#935a34" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M14 16c0-4 2-7 1-11" stroke="#3f4a1f" stroke-width="2" stroke-linecap="round" fill="none"/>
-      <path d="M20 16c0-5 3-6 2-11" stroke="#3f4a1f" stroke-width="2" stroke-linecap="round" fill="none"/>
-    </svg>
+    <div class="app-icon">
+      <svg viewBox="0 0 40 40" fill="none">
+        <path d="M8 16h24l-2 14a4 4 0 0 1-4 3.5H14a4 4 0 0 1-4-3.5L8 16Z" fill="#efe9d8" opacity="0.95"/>
+        <path d="M30 18c5-1 7 3 5 7-1.5 3-5 3.5-7 2" stroke="#efe9d8" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.85"/>
+        <path d="M14 16c0-4 2-7 1-11" stroke="#efe9d8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.85"/>
+        <path d="M20 16c0-5 3-6 2-11" stroke="#efe9d8" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.85"/>
+      </svg>
+    </div>
     <h1 class="brand">ตำรับร้าน</h1>
   </header>
   <div class="sub">คู่มือสูตรเครื่องดื่มทั้งร้าน — เลือกหมวดหมู่ แล้วไล่ตามขั้นตอน</div>
@@ -261,6 +285,30 @@ document.getElementById('disclaimer').textContent = '⚠ ' + DATA.disclaimer;
 
 let state = { category: null, drink: null, sweet: null, globalQuery: '', tab: 'categories' };
 
+// ---- storage helper: use window.storage when available (Claude artifact preview),
+// otherwise fall back to the browser's own localStorage so data still persists
+// permanently when this file is opened/installed as a standalone app ----
+const localFallbackStore = {
+  async get(key){
+    try{
+      const raw = window.localStorage.getItem(key);
+      return raw === null ? null : { key, value: raw };
+    }catch(e){ return null; }
+  },
+  async set(key, value){
+    try{
+      window.localStorage.setItem(key, value);
+      return { key, value };
+    }catch(e){ return null; }
+  }
+};
+function getStore(){ return window.storage || localFallbackStore; }
+function hasAnyStorage(){
+  if(window.storage) return true;
+  try{ window.localStorage.setItem('__probe__','1'); window.localStorage.removeItem('__probe__'); return true; }
+  catch(e){ return false; }
+}
+
 // ---- favorites (personal to this browser/device, star toggle) ----
 let favorites = []; // array of {category, name}
 let favoritesLoaded = false;
@@ -268,8 +316,7 @@ function favId(drink){ return (drink.category||'') + '||' + (drink.displayName |
 function isFavorite(drink){ const id = favId(drink); return favorites.some(f => f.id === id); }
 async function loadFavorites(){
   try{
-    if(!window.storage) throw new Error('no storage');
-    const res = await window.storage.get('favorites_list', false);
+    const res = await getStore().get('favorites_list', false);
     favorites = res && res.value ? JSON.parse(res.value) : [];
   }catch(e){
     favorites = [];
@@ -278,8 +325,7 @@ async function loadFavorites(){
 }
 async function persistFavorites(){
   try{
-    if(!window.storage) throw new Error('no storage');
-    await window.storage.set('favorites_list', JSON.stringify(favorites), false);
+    await getStore().set('favorites_list', JSON.stringify(favorites), false);
   }catch(e){ /* ignore, stays in-memory for this session */ }
 }
 function toggleFavorite(drink){
@@ -311,7 +357,7 @@ function attachStarHandler(container, drink){
   };
 }
 
-// ---- shared note storage (per-drink, visible to everyone using this app) ----
+// ---- note storage (saved locally to this browser/device, per drink) ----
 const noteCache = {};
 function slugKey(s){ return (s||'').toString().replace(/[\/\\'"]/g,'').replace(/\s+/g,'_').slice(0,80); }
 function noteKey(drink){ return `note__${slugKey(drink.category)}__${slugKey(drink.displayName || drink.name)}`; }
@@ -319,8 +365,7 @@ async function loadNote(drink){
   const key = noteKey(drink);
   if(key in noteCache) return noteCache[key];
   try{
-    if(!window.storage) throw new Error('no storage');
-    const res = await window.storage.get(key, true);
+    const res = await getStore().get(key, true);
     const val = res ? res.value : '';
     noteCache[key] = val;
     return val;
@@ -333,8 +378,7 @@ async function saveNote(drink, text){
   const key = noteKey(drink);
   noteCache[key] = text;
   try{
-    if(!window.storage) throw new Error('no storage');
-    await window.storage.set(key, text, true);
+    await getStore().set(key, text, true);
     return true;
   }catch(e){
     return false;
@@ -718,16 +762,27 @@ function renderRecipe(){
     }
   }
 
+  // pull the cup-size attribute out into a badge near the title so it's the first
+  // thing staff sees, instead of buried inside the ingredient list
+  const attrs = (d.attributes || []).slice();
+  const sizeIdx = attrs.findIndex(a => a.label === 'ขนาดแก้ว');
+  const sizeAttr = sizeIdx >= 0 ? attrs.splice(sizeIdx, 1)[0] : null;
+
   let attrHtml = '';
-  if(d.attributes && d.attributes.length){
-    attrHtml = `<div class="ing-title">ส่วนผสม / ข้อมูลประจำเมนู</div><ul class="ings">${d.attributes.map(a => {
+  if(attrs.length){
+    attrHtml = `<div class="ing-title">ส่วนผสม / ข้อมูลประจำเมนู</div><ul class="ings">${attrs.map(a => {
       const isNote = a.label.includes('หมายเหตุ');
-      const cls = isNote ? 'note-row' : (a.flagged ? 'flagged' : '');
+      const cls = isNote ? 'note-row' : (a.flagged ? 'flagged' : (a.override ? 'override' : ''));
       return `<li class="${cls}"><span class="lbl">${a.label}</span><span class="val">${a.text}</span></li>`;
     }).join('')}</ul>`;
   } else if(!d.hasSweetness){
     attrHtml = `<p class="no-attrs-note">ไม่มีข้อมูลส่วนผสมเพิ่มเติมสำหรับเมนูนี้</p>`;
   }
+
+  const badgeRow = (sizeAttr || d.hasSweetness) ? `<div class="badge-row">
+    ${sizeAttr ? `<span class="size-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M5 3h14l-1.8 15.5A3 3 0 0 1 14.2 21H9.8a3 3 0 0 1-3-2.5L5 3Z" stroke="currentColor" stroke-width="1.8"/></svg>${sizeAttr.text}</span>` : ''}
+    ${d.hasSweetness ? `<span class="pct-tag">${state.sweet}</span>` : ''}
+  </div>` : '';
 
   stage.innerHTML = `
     <div class="panel">
@@ -735,13 +790,13 @@ function renderRecipe(){
         ${starBtnHtml(d)}
         <h2>${d.displayName || d.name}</h2>
         ${d.nameSub ? `<div class="name-sub">${d.nameSub}</div>` : ''}
-        ${d.hasSweetness ? `<span class="pct-tag">${state.sweet}</span>` : ''}
+        ${badgeRow}
         ${attrHtml}
         ${sweetHtml}
         <div class="note-box">
           <div class="note-title">โน้ตเพิ่มเติม (เผื่อสูตรมีการเปลี่ยนแปลง) <span class="note-status" id="note-status">กำลังโหลด...</span></div>
-          <textarea id="note-textarea" placeholder="พิมพ์โน้ตของเมนูนี้ไว้ที่นี่ เช่น ปรับสูตร วันที่ปรับ ฯลฯ — บันทึกอัตโนมัติ และทุกคนที่เปิดแอปนี้จะเห็นโน้ตเดียวกัน" disabled></textarea>
-          <div class="note-hint">โน้ตนี้แชร์ร่วมกันทุกคนที่ใช้แอปนี้ และผูกกับเมนู+ระดับหมวดหมู่นี้โดยเฉพาะ</div>
+          <textarea id="note-textarea" placeholder="พิมพ์โน้ตของเมนูนี้ไว้ที่นี่ เช่น ปรับสูตร วันที่ปรับ ฯลฯ — บันทึกอัตโนมัติในเบราว์เซอร์นี้" disabled></textarea>
+          <div class="note-hint">โน้ตนี้บันทึกไว้ในเบราว์เซอร์/อุปกรณ์เครื่องนี้เท่านั้น ผูกกับเมนู+หมวดหมู่นี้โดยเฉพาะ</div>
         </div>
       </div>
       <div class="back-row">
@@ -759,7 +814,7 @@ function renderRecipe(){
     if(state.drink !== d) return; // user navigated away already
     ta.value = val || '';
     ta.disabled = false;
-    statusEl.textContent = window.storage ? '' : '(ไม่สามารถบันทึกถาวรในเบราว์เซอร์นี้)';
+    statusEl.textContent = hasAnyStorage() ? '' : '(เบราว์เซอร์นี้ไม่รองรับการบันทึกถาวร — โน้ตจะหายเมื่อปิดแท็บ)';
   });
   let saveTimer = null;
   ta.addEventListener('input', () => {
