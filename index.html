@@ -462,12 +462,17 @@ function wireSearchBox(){
   const el = document.getElementById('tab-search');
   if(!el) return;
   el.value = state.globalQuery || '';
-  el.oninput = (e) => { state.globalQuery = e.target.value; renderStage(); };
-  // always focus: the input is recreated on every keystroke render, so this
-  // both opens the keyboard the moment the search tab is opened, and keeps
-  // focus (with caret at the end) across re-renders while typing
+  el.oninput = (e) => {
+    state.globalQuery = e.target.value;
+    // Update only the results list on each keystroke — do NOT rebuild the
+    // input itself (that used to cause the mobile keyboard to stutter/
+    // flicker on every character, since the <input> was destroyed and
+    // recreated each time via a full renderStage()/renderSearchTab() call).
+    const results = document.getElementById('search-results');
+    if(results) renderSearchResultsInto(results);
+  };
+  // focus once when the search tab is first opened
   el.focus();
-  const v = el.value; el.value=''; el.value=v;
 }
 
 function renderTabBar(){
